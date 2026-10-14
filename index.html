@@ -1,0 +1,2513 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#080b0f"
+    >
+
+    <title>Career Hub — Futebol</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#080b0f">
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div>
+        <span class="eyebrow">
+            CAREER HUB
+        </span>
+
+        <h1>
+            ⚽ Minhas Carreiras
+        </h1>
+    </div>
+
+    <div class="topbar-actions">
+        <button
+            class="secondary"
+            id="openStatsBtn"
+        >
+            📊 Estatísticas
+        </button>
+
+        <button
+            class="secondary"
+            id="openHistoryBtn"
+        >
+            📖 História
+        </button>
+
+        <button
+            class="primary"
+            id="newCareerBtn"
+        >
+            ＋ Nova carreira
+        </button>
+
+        <button
+            class="secondary"
+            id="exportBackupBtn"
+            type="button"
+            title="Exportar backup offline"
+        >
+            📤 Exportar
+        </button>
+
+        <button
+            class="secondary"
+            id="importBackupBtn"
+            type="button"
+            title="Importar backup offline"
+        >
+            📥 Importar
+        </button>
+
+        <button
+            class="secondary"
+            id="restoreBackupBtn"
+            type="button"
+            title="Restaurar o backup de segurança"
+        >
+            ↩️ Restaurar
+        </button>
+
+        <input
+            id="backupFileInput"
+            type="file"
+            accept="application/json,.json"
+            hidden
+        >
+
+        <span class="backup-note" title="As fotos e escudos são incorporados ao arquivo JSON de backup.">
+            📸 Fotos incluídas no backup
+        </span>
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <!-- =========================================
+         LISTA DE CARREIRAS
+    ========================================== -->
+
+    <section id="careerListView">
+
+        <div class="section-head career-list-toggle-wrap">
+
+            <button type="button" id="careerCategoriesToggle" class="career-list-toggle" aria-expanded="false">
+                <span>📁 Suas carreiras</span>
+                <span id="careerCategoriesChevron">⌄</span>
+            </button>
+
+            <p class="career-list-description">
+                Clique para escolher entre carreiras de jogador e treinador.
+            </p>
+
+        </div>
+
+
+        <div
+            id="careerGrid"
+            class="career-grid career-grid-collapsed"
+            aria-hidden="true"
+        ></div>
+
+
+        <div
+            id="emptyState"
+            class="empty-state hidden"
+        >
+
+            <div class="empty-icon">
+                ⚽
+            </div>
+
+            <h3>
+                Nenhuma carreira criada
+            </h3>
+
+            <p>
+                Crie sua primeira carreira para começar.
+            </p>
+
+            <button
+                class="primary"
+                id="emptyNewBtn"
+            >
+                ＋ Criar carreira
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+
+    <!-- =========================================
+         ESTATÍSTICAS GERAIS
+    ========================================== -->
+    <section id="statsView" class="hidden">
+
+        <div class="page-toolbar">
+            <button class="ghost" id="backFromStatsBtn">← Minhas carreiras</button>
+            <div>
+                <span class="eyebrow">CAREER HUB</span>
+                <h2>📊 Estatísticas</h2>
+            </div>
+            <div></div>
+        </div>
+
+        <div class="hub-tabs">
+            <button class="hub-tab active" data-stats-tab="clubs">🏟️ Por Clubes</button>
+            <button class="hub-tab" data-stats-tab="selections">🌎 Por Seleções</button>
+            <button class="hub-tab" data-stats-tab="awards">🏆 Prêmios Individuais</button>
+            <button class="hub-tab" data-stats-tab="custom">✏️ Minhas Estatísticas</button>
+        </div>
+
+        <section id="stats-panel-clubs" class="stats-panel">
+            <div class="section-head">
+                <div>
+                    <h2>🏟️ Estatísticas por Clubes</h2>
+                    <p>Os números dos jogadores são somados automaticamente a partir das temporadas das carreiras.</p>
+                </div>
+            </div>
+            <div id="clubStatsList" class="stats-card-grid"></div>
+        </section>
+
+        <section id="stats-panel-selections" class="stats-panel hidden">
+            <div class="section-head">
+                <div>
+                    <h2>🌎 Estatísticas por Seleções</h2>
+                    <p>Adicione a seleção na temporada do jogador e ela aparecerá aqui automaticamente.</p>
+                </div>
+            </div>
+            <div id="selectionStatsList" class="stats-card-grid"></div>
+        </section>
+
+        <section id="stats-panel-awards" class="stats-panel hidden">
+            <div class="section-head">
+                <div>
+                    <h2>🏆 Prêmios Individuais</h2>
+                    <p>Todos os prêmios cadastrados nas carreiras aparecem automaticamente aqui. Você também pode criar categorias novas.</p>
+                </div>
+                <button class="primary" id="addStatsAwardCategoryBtn">＋ Adicionar prêmio</button>
+            </div>
+            <div id="statsAwardsList" class="stats-card-grid"></div>
+        </section>
+
+        <section id="stats-panel-custom" class="stats-panel hidden">
+            <div class="section-head">
+                <div>
+                    <h2>✏️ Minhas Estatísticas</h2>
+                    <p>Crie, edite ou exclua qualquer estatística que quiser.</p>
+                </div>
+                <button class="primary" id="addCustomStatBtn">＋ Adicionar estatística</button>
+            </div>
+            <div id="customStatsList" class="stats-card-grid"></div>
+        </section>
+    </section>
+
+    <!-- =========================================
+         HISTÓRIA
+    ========================================== -->
+    <section id="historyView" class="hidden">
+
+        <div class="page-toolbar">
+            <button class="ghost" id="backFromHistoryBtn">← Minhas carreiras</button>
+            <div>
+                <span class="eyebrow">CAREER HUB</span>
+                <h2>📖 História</h2>
+            </div>
+            <button class="primary" id="addHistoryBtn">＋ Adicionar história</button>
+        </div>
+
+        <div id="historyList" class="history-grid"></div>
+    </section>
+
+
+    <!-- =========================================
+         PÁGINA DA CARREIRA
+    ========================================== -->
+
+    <section
+        id="careerView"
+        class="hidden"
+    >
+
+        <!-- TOPO -->
+
+        <div class="career-top">
+
+            <button
+                class="ghost"
+                id="backBtn"
+            >
+                ← Minhas carreiras
+            </button>
+
+
+            <div class="career-actions">
+
+                <button
+                    class="ghost"
+                    id="editCareerBtn"
+                >
+                    ✏️ Editar
+                </button>
+
+
+                <button
+                    class="danger-outline"
+                    id="deleteCareerBtn"
+                >
+                    🗑️ Excluir
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PERFIL -->
+
+        <div class="career-hero">
+
+            <div class="profile-photo-wrap">
+
+                <img
+                    id="profilePhoto"
+                    class="profile-photo"
+                    alt=""
+                >
+
+                <div
+                    id="profilePlaceholder"
+                    class="profile-placeholder"
+                >
+                    ⚽
+                </div>
+
+
+                <label class="photo-button">
+
+                    📷 Foto
+
+                    <input
+                        id="profilePhotoInput"
+                        type="file"
+                        accept="image/*"
+                        hidden
+                    >
+
+                </label>
+
+            </div>
+
+
+
+            <div class="profile-main">
+
+                <span
+                    class="eyebrow"
+                    id="profileType"
+                >
+                    JOGADOR
+                </span>
+
+
+                <h2 id="profileName">
+                    Nome
+                </h2>
+
+
+                <div class="profile-meta">
+
+                    <span id="profilePosition">
+                        ATA
+                    </span>
+
+                    <span id="profileNation">
+                        🇧🇷 Brasil
+                    </span>
+
+                    <span id="profileClub">
+                        Sem clube
+                    </span>
+
+                    <span id="profileAge">
+                    </span>
+
+                </div>
+
+
+
+                <!-- ESTATÍSTICAS DO JOGADOR -->
+
+                <div
+                    class="quick-stats"
+                    id="playerQuickStats"
+                >
+
+                    <div>
+
+                        <input
+                            id="headerOverall"
+                            class="header-overall-input"
+                            type="number"
+                            min="0"
+                            max="99"
+                            value="0"
+                            inputmode="numeric"
+                            aria-label="Overall manual"
+                        >
+
+                        <span>
+                            Overall
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong id="headerSeasons">
+                            0
+                        </strong>
+
+                        <span>
+                            Temporadas
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong id="headerGames">
+                            0
+                        </strong>
+
+                        <span>
+                            Jogos
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong id="headerGoals">
+                            0
+                        </strong>
+
+                        <span>
+                            Gols
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong id="headerAssists">
+                            0
+                        </strong>
+
+                        <span>
+                            Assistências
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong id="headerTitles">
+                            0
+                        </strong>
+
+                        <span>
+                            Títulos
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ESTATÍSTICAS DO TREINADOR -->
+
+                <div
+                    class="quick-stats coach-stats hidden"
+                    id="coachQuickStats"
+                >
+
+                    <div>
+
+                        <strong id="coachSeasons">
+                            0
+                        </strong>
+
+                        <span>
+                            Temporadas
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong id="coachClubs">
+                            0
+                        </strong>
+
+                        <span>
+                            Clubes
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong id="coachTitles">
+                            0
+                        </strong>
+
+                        <span>
+                            Títulos
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong id="coachWins">
+                            0
+                        </strong>
+
+                        <span>
+                            Vitórias
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================
+             ABAS
+        ====================================== -->
+
+        <nav
+            class="tabs"
+            id="tabs"
+        ></nav>
+
+
+
+        <!-- =====================================
+             TEMPORADAS
+        ====================================== -->
+
+        <section
+            class="tab-panel"
+            id="tab-tactics"
+        ></section>
+
+
+        <section
+            class="tab-panel active"
+            id="tab-seasons"
+        >
+
+            <div class="section-head">
+
+                <div>
+
+                    <h2>
+                        📅 Temporadas
+                    </h2>
+
+                    <p>
+                        Registre os dados de cada temporada.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="primary"
+                    id="addSeasonBtn"
+                >
+                    ＋ Adicionar temporada
+                </button>
+
+            </div>
+
+
+            <div
+                id="seasonList"
+                class="season-list"
+            ></div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             TRANSFERÊNCIAS
+        ====================================== -->
+
+        <section
+            class="tab-panel"
+            id="tab-transfers"
+        >
+
+            <div class="section-head">
+
+                <div>
+
+                    <h2>
+                        🔄 Transferências
+                    </h2>
+
+                    <p>
+                        Compra, venda, empréstimo,
+                        troca e pré-contrato.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="primary"
+                    id="addTransferBtn"
+                >
+                    ＋ Nova transferência
+                </button>
+
+            </div>
+
+
+            <div
+                id="transferList"
+                class="transfer-grid"
+            ></div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             NÚMEROS TOTAIS
+        ====================================== -->
+
+        <section
+            class="tab-panel"
+            id="tab-totals"
+        >
+
+            <div class="section-head">
+
+                <div>
+
+                    <h2>
+                        📊 Números totais
+                    </h2>
+
+                    <p>
+                        Resumo automático da carreira.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="summaryGrid"
+                class="summary-grid"
+            ></div>
+
+
+            <div class="card">
+
+                <div class="card-title-row">
+
+                    <h3>
+                        🏟️ Totais por clube / seleção
+                    </h3>
+
+                </div>
+
+
+                <div class="table-wrap">
+
+                    <table>
+
+                        <thead id="totalsHead"></thead>
+
+                        <tbody id="totalsBody"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div id="playerSelectionQuickAdd" class="card hidden">
+                <div class="card-title-row">
+                    <div>
+                        <h3>🌎 Estatísticas de seleção</h3>
+                        <p class="muted">Adicione manualmente uma seleção. Ela aparecerá automaticamente em Estatísticas → Por Seleções.</p>
+                    </div>
+                    <button type="button" class="primary" id="addPlayerSelectionStatBtn">＋ Adicionar seleção</button>
+                </div>
+            </div>
+
+
+            <div
+                id="coachSquadManager"
+                class="card hidden"
+            ></div>
+
+        </section>
+
+
+        <!-- =====================================
+             TÍTULOS
+        ====================================== -->
+
+        <section
+            class="tab-panel"
+            id="tab-titles"
+        >
+
+            <div class="section-head">
+
+                <div>
+
+                    <h2>
+                        🏆 Títulos
+                    </h2>
+
+                    <p>
+                        Conquistas coletivas da carreira.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="primary"
+                    id="addTitleBtn"
+                >
+                    ＋ Adicionar título
+                </button>
+
+            </div>
+
+
+            <div
+                id="titleList"
+                class="title-grid"
+            ></div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             PRÊMIOS
+        ====================================== -->
+
+        <section
+            class="tab-panel"
+            id="tab-awards"
+        >
+
+            <div class="section-head">
+
+                <div>
+
+                    <h2>
+                        🥇 Prêmios individuais
+                    </h2>
+
+                    <p>
+                        Registre prêmios e reconhecimentos.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="primary"
+                    id="addAwardBtn"
+                >
+                    ＋ Adicionar prêmio
+                </button>
+
+            </div>
+
+
+            <div
+                id="awardList"
+                class="award-grid"
+            ></div>
+
+        </section>
+
+
+
+        <!-- =====================================
+             GALERIA
+        ====================================== -->
+
+        <section
+            class="tab-panel"
+            id="tab-gallery"
+        >
+
+            <div class="section-head">
+
+                <div>
+
+                    <h2>
+                        🖼️ Galeria
+                    </h2>
+
+                    <p>
+                        Fotos organizadas em duas áreas separadas: carreira do clube e momentos importantes/premiações.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="primary"
+                    id="addGalleryBtn"
+                >
+                    ＋ Adicionar foto
+                </button>
+
+            </div>
+
+
+            <div class="gallery-tabs">
+                <button class="gallery-filter active" data-gallery-filter="career">Fotos da Carreira do Clube</button>
+                <button class="gallery-filter" data-gallery-filter="important">Momentos Importantes e Premiações</button>
+            </div>
+            <div id="galleryList" class="gallery-grid"></div>
+
+        </section>
+
+
+
+        <!-- PRATELEIRA -->
+        <section class="tab-panel" id="tab-shelf">
+            <div class="section-head"><div><h2>Prateleira</h2><p>Escolha entre Troféus e Prêmios Individuais. Cada opção usa a mesma prateleira grande original, com três fileiras, fundo de LED e escudos dos times embaixo.</p></div></div>
+            <div class="shelf-tabs" id="shelfTabs">
+                <button type="button" class="shelf-filter active" data-shelf-view="trophy">Troféus</button>
+                <button type="button" class="shelf-filter" data-shelf-view="award">Prêmios Individuais</button>
+            </div>
+            <div class="section-head shelf-add-head"><div><h3 id="shelfViewTitle">Prateleira de Troféus</h3></div><button class="primary" id="addShelfTitleBtn">＋ Adicionar à prateleira</button></div>
+            <div id="titleShelf" class="trophy-shelf"></div>
+            <div id="titleShelfEmpty" class="empty-record hidden">Nenhum item nesta prateleira.</div>
+            <div class="section-head shelf-second-head"><div><h2>Reconhecimentos da Carreira</h2><p>Totais automáticos dos reconhecimentos frequentes.</p></div></div>
+            <div id="recognitionsList" class="stats-card-grid"></div>
+        </section>
+
+        <!-- =====================================
+             HISTÓRIA DA CARREIRA
+        ====================================== -->
+
+        <section class="tab-panel" id="tab-career-history">
+            <div class="section-head">
+                <div>
+                    <h2>📖 História</h2>
+                    <p>Registre a trajetória desta carreira com fotos e momentos importantes.</p>
+                </div>
+                <button class="primary" id="addCareerHistoryBtn">＋ Adicionar história</button>
+            </div>
+            <div id="careerHistoryList" class="career-history-list"></div>
+        </section>
+
+
+        <!-- =====================================
+             OVERALL
+        ====================================== -->
+
+        <section
+            class="tab-panel"
+            id="tab-overall"
+        >
+
+            <div class="section-head">
+
+                <div>
+
+                    <h2>
+                        ⭐ Overall / atributos
+                    </h2>
+
+                    <p>
+                        Ficha do jogador no estilo FIFA.
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="primary"
+                    id="saveOverallBtn"
+                >
+                    💾 Salvar atributos
+                </button>
+
+            </div>
+
+
+
+            <div class="overall-layout">
+
+
+                <!-- CARTÃO -->
+
+                <div class="fifa-card">
+
+                    <div class="fifa-card-top">
+
+                        <div>
+
+                            <span>
+                                PLAYER
+                            </span>
+
+                            <strong id="cardName">
+                                NOME
+                            </strong>
+
+                            <small id="cardPosition">
+                                ATA
+                            </small>
+
+                        </div>
+
+
+                        <div
+                            class="big-overall"
+                            id="cardOverall"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <div class="fifa-photo-wrap">
+
+                        <img
+                            id="cardPhoto"
+                            alt=""
+                        >
+
+                    </div>
+
+
+                    <div class="fifa-info">
+
+                        <span id="cardNation">
+                            🇧🇷
+                        </span>
+
+                        <span id="cardClub">
+                            CLUBE
+                        </span>
+
+                        <span id="cardPhysical">
+                            180 cm · 75 kg
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ATRIBUTOS -->
+
+                <div
+                    id="attributeGroups"
+                    class="attribute-groups"
+                ></div>
+
+            </div>
+
+        </section>
+
+    </section>
+
+</main>
+
+
+
+<!-- =========================================
+     MODAL — NOVA / EDITAR CARREIRA
+========================================== -->
+
+<dialog id="careerDialog">
+
+    <form
+        id="careerForm"
+        class="modal-form"
+    >
+
+        <div class="modal-head">
+
+            <h2 id="careerDialogTitle">
+                Nova carreira
+            </h2>
+
+
+            <button
+                type="button"
+                class="icon-btn"
+                data-close="careerDialog"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <input
+            type="hidden"
+            id="careerId"
+        >
+
+
+        <label>
+
+            Tipo de carreira
+
+            <select id="careerType">
+
+                <option value="player">
+                    ⚽ Jogador
+                </option>
+
+                <option value="coach">
+                    🧠 Treinador
+                </option>
+
+            </select>
+
+        </label>
+
+
+        <label>
+
+            Nome
+
+            <input
+                id="careerName"
+                required
+                placeholder="Ex.: Marcus Paulo"
+            >
+
+        </label>
+
+
+
+        <!-- CAMPOS JOGADOR -->
+
+        <div id="playerCareerFields">
+
+            <div class="form-grid">
+
+                <label>
+
+                    Posição
+
+                    <input
+                        id="careerPosition"
+                        placeholder="ATA"
+                    >
+
+                </label>
+
+
+                <label>
+
+                    Nacionalidade
+
+                    <input
+                        id="careerNation"
+                        value="🇧🇷 Brasil"
+                    >
+
+                </label>
+
+
+                <label>
+
+                    Clube inicial/atual
+
+                    <input
+                        id="careerClub"
+                        placeholder="Atlético-MG"
+                    >
+
+                </label>
+
+
+                <label>
+
+                    Idade
+
+                    <input
+                        id="careerAge"
+                        type="number"
+                        min="0"
+                        value="18"
+                    >
+
+                </label>
+
+
+                <label>
+
+                    Altura (cm)
+
+                    <input
+                        id="careerHeight"
+                        type="number"
+                        value="180"
+                    >
+
+                </label>
+
+
+                <label>
+
+                    Peso (kg)
+
+                    <input
+                        id="careerWeight"
+                        type="number"
+                        value="75"
+                    >
+
+                </label>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CAMPOS TREINADOR -->
+
+        <div
+            id="coachCareerFields"
+            class="hidden"
+        >
+
+            <div class="form-grid">
+
+                <label>
+
+                    Nacionalidade
+
+                    <input
+                        id="coachNation"
+                        value="🇧🇷 Brasil"
+                    >
+
+                </label>
+
+
+                <label>
+
+                    Clube inicial/atual
+
+                    <input
+                        id="coachClub"
+                        placeholder="Atlético-MG"
+                    >
+
+                </label>
+
+
+                <label>
+
+                    Idade
+
+                    <input
+                        id="coachAge"
+                        type="number"
+                        min="0"
+                        value="35"
+                    >
+
+                </label>
+
+
+                <label>
+
+                    Estilo
+
+                    <input
+                        id="coachStyle"
+                        placeholder="Ofensivo"
+                    >
+
+                </label>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="ghost"
+                data-close="careerDialog"
+            >
+                Cancelar
+            </button>
+
+
+            <button
+                class="primary"
+                type="submit"
+            >
+                Salvar carreira
+            </button>
+
+        </div>
+
+    </form>
+
+</dialog>
+
+
+
+<!-- =========================================
+     MODAL — TEMPORADA
+========================================== -->
+
+<dialog id="seasonDialog">
+
+    <form
+        id="seasonForm"
+        class="modal-form"
+    >
+
+        <div class="modal-head">
+
+            <h2 id="seasonDialogTitle">
+                Temporada
+            </h2>
+
+
+            <button
+                type="button"
+                class="icon-btn"
+                data-close="seasonDialog"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <input
+            type="hidden"
+            id="seasonId"
+        >
+
+
+        <div class="form-grid">
+
+            <label>
+
+                Temporada
+
+                <input
+                    id="seasonName"
+                    required
+                    placeholder="2028/29"
+                >
+
+            </label>
+
+
+            <label>
+
+                Clube
+
+                <input
+                    id="seasonClub"
+                    required
+                    placeholder="Atlético-MG"
+                >
+
+            </label>
+
+            <label>
+
+                Seleção
+
+                <input
+                    id="seasonSelection"
+                    placeholder="Brasil (opcional)"
+                >
+
+            </label>
+
+            <label>
+
+                Escudo do clube
+
+                <input
+                    id="seasonClubPhoto"
+                    type="file"
+                    accept="image/*"
+                >
+
+            </label>
+
+
+            <label>
+
+                Jogos
+
+                <input
+                    id="seasonGames"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+
+            </label>
+
+
+            <label>
+
+                Vitórias
+
+                <input
+                    id="seasonWins"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+
+            </label>
+
+
+            <label>
+
+                <span data-player-season-only>Gols</span>
+                <span data-coach-season-only>Gols pró</span>
+
+                <input
+                    id="seasonGoals"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+
+            </label>
+
+
+            <label data-coach-season-only>
+
+                Gols sofridos
+
+                <input
+                    id="seasonGoalsAgainst"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+
+            </label>
+
+
+            <label data-player-season-only>
+
+                Assistências
+
+                <input
+                    id="seasonAssists"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+
+            </label>
+
+
+            <label data-coach-season-only>
+
+                Empates
+
+                <input
+                    id="seasonDraws"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+
+            </label>
+
+
+            <label>
+
+                Derrotas
+
+                <input
+                    id="seasonLosses"
+                    type="number"
+                    min="0"
+                    value="0"
+                >
+
+            </label>
+
+
+            <label data-player-season-only>
+
+                Overall
+
+                <input
+                    id="seasonOverall"
+                    type="number"
+                    min="0"
+                    max="99"
+                    value="0"
+                >
+
+            </label>
+
+        </div>
+
+
+        <label>
+
+            Observações
+
+            <textarea
+                id="seasonNotes"
+                rows="3"
+            ></textarea>
+
+        </label>
+
+
+
+        <!-- TÍTULOS DA TEMPORADA -->
+
+        <div class="card compact">
+
+            <div class="card-title-row">
+
+                <h3>
+                    🏆 Títulos da temporada
+                </h3>
+
+
+                <button
+                    type="button"
+                    class="small-btn"
+                    id="addSeasonTrophyBtn"
+                >
+                    ＋ Título
+                </button>
+
+            </div>
+
+
+            <div
+                id="seasonTrophyEditor"
+            ></div>
+
+        </div>
+
+
+
+        <!-- FOTO -->
+
+        <div class="photo-upload-row">
+
+            <img
+                id="seasonPhotoPreview"
+                class="thumb large"
+                alt=""
+            >
+
+
+            <label class="upload-box">
+
+                📷 Foto da temporada
+
+                <input
+                    id="seasonPhoto"
+                    type="file"
+                    accept="image/*"
+                    hidden
+                >
+
+            </label>
+
+        </div>
+
+
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="ghost"
+                data-close="seasonDialog"
+            >
+                Cancelar
+            </button>
+
+
+            <button
+                class="primary"
+                type="submit"
+            >
+                Salvar temporada
+            </button>
+
+        </div>
+
+    </form>
+
+</dialog>
+
+
+
+<!-- =========================================
+     MODAL — TRANSFERÊNCIA
+========================================== -->
+
+<dialog id="transferDialog">
+
+    <form
+        id="transferForm"
+        class="modal-form"
+    >
+
+        <div class="modal-head">
+
+            <h2>
+                Nova transferência
+            </h2>
+
+
+            <button
+                type="button"
+                class="icon-btn"
+                data-close="transferDialog"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <input
+            type="hidden"
+            id="transferId"
+        >
+
+
+        <div class="form-grid">
+
+            <label>
+
+                Jogador
+
+                <input
+                    id="transferPlayer"
+                    required
+                    placeholder="Nome do jogador"
+                >
+
+            </label>
+
+
+            <label>
+
+                Temporada/data
+
+                <input
+                    id="transferDate"
+                    placeholder="2028/29"
+                >
+
+            </label>
+
+            <label id="transferSeasonWrap">
+
+                Temporada da carreira
+
+                <select id="transferSeason">
+                    <option value="">Sem temporada</option>
+                </select>
+
+            </label>
+
+
+            <label>
+
+                Tipo
+
+                <select id="transferType">
+
+                    <option>
+                        Compra
+                    </option>
+
+                    <option>
+                        Venda
+                    </option>
+
+                    <option>
+                        Empréstimo
+                    </option>
+
+                    <option>
+                        Troca
+                    </option>
+
+                    <option>
+                        Pré-contrato
+                    </option>
+
+                </select>
+
+            </label>
+
+
+            <label>
+
+                Valor
+
+                <input
+                    id="transferValue"
+                    placeholder="€ 50.000.000"
+                >
+
+            </label>
+
+
+            <label>
+
+                Time de origem
+
+                <input
+                    id="transferFrom"
+                    required
+                    placeholder="Atlético-MG"
+                >
+
+            </label>
+
+
+            <label>
+
+                Time de destino
+
+                <input
+                    id="transferTo"
+                    required
+                    placeholder="Real Madrid"
+                >
+
+            </label>
+
+        </div>
+
+
+        <label>
+
+            Observações
+
+            <textarea
+                id="transferNotes"
+                rows="3"
+                placeholder="Detalhes da negociação..."
+            ></textarea>
+
+        </label>
+
+
+
+        <!-- FOTO DO JOGADOR -->
+
+        <div class="photo-upload-row">
+
+            <img
+                id="transferPhotoPreview"
+                class="thumb large"
+                alt=""
+            >
+
+
+            <label class="upload-box">
+
+                📷 Foto do jogador
+
+                <input
+                    id="transferPhoto"
+                    type="file"
+                    accept="image/*"
+                    hidden
+                >
+
+            </label>
+
+        </div>
+
+
+
+        <!-- ESCUDOS -->
+
+        <div class="photo-upload-row">
+
+            <img
+                id="transferFromLogoPreview"
+                class="thumb"
+                alt=""
+            >
+
+
+            <label class="upload-box">
+
+                🛡️ Escudo origem
+
+                <input
+                    id="transferFromLogo"
+                    type="file"
+                    accept="image/*"
+                    hidden
+                >
+
+            </label>
+
+
+            <img
+                id="transferToLogoPreview"
+                class="thumb"
+                alt=""
+            >
+
+
+            <label class="upload-box">
+
+                🛡️ Escudo destino
+
+                <input
+                    id="transferToLogo"
+                    type="file"
+                    accept="image/*"
+                    hidden
+                >
+
+            </label>
+
+        </div>
+
+
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="ghost"
+                data-close="transferDialog"
+            >
+                Cancelar
+            </button>
+
+
+            <button
+                class="primary"
+                type="submit"
+            >
+                Salvar transferência
+            </button>
+
+        </div>
+
+    </form>
+
+</dialog>
+
+
+
+<!-- =========================================
+     MODAL — TÍTULO
+========================================== -->
+
+<dialog id="titleDialog">
+
+    <form
+        id="titleForm"
+        class="modal-form"
+    >
+
+        <div class="modal-head">
+
+            <h2>
+                Título
+            </h2>
+
+
+            <button
+                type="button"
+                class="icon-btn"
+                data-close="titleDialog"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <input
+            type="hidden"
+            id="titleId"
+        >
+
+
+        <div class="form-grid">
+
+            <label>
+
+                Competição
+
+                <input
+                    id="titleName"
+                    required
+                    placeholder="Brasileirão"
+                >
+
+            </label>
+
+
+            <label>
+
+                Temporada
+
+                <input
+                    id="titleSeason"
+                    placeholder="2028/29"
+                >
+
+            </label>
+
+
+            <label>
+
+                Clube
+
+                <input
+                    id="titleClub"
+                    placeholder="Atlético-MG"
+                >
+
+            </label>
+
+
+            <label>
+
+                Quantidade
+
+                <input
+                    id="titleCount"
+                    type="number"
+                    min="1"
+                    value="1"
+                >
+
+            </label>
+
+        </div>
+
+
+        <label>
+
+            Descrição
+
+            <textarea
+                id="titleNotes"
+                rows="3"
+            ></textarea>
+
+        </label>
+
+
+        <div class="photo-upload-row">
+
+            <img
+                id="titlePhotoPreview"
+                class="thumb large"
+                alt=""
+            >
+
+
+            <label class="upload-box">
+
+                📷 Foto do título
+
+                <input
+                    id="titlePhoto"
+                    type="file"
+                    accept="image/*"
+                    hidden
+                >
+
+            </label>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="ghost"
+                data-close="titleDialog"
+            >
+                Cancelar
+            </button>
+
+
+            <button
+                class="primary"
+                type="submit"
+            >
+                Salvar título
+            </button>
+
+        </div>
+
+    </form>
+
+</dialog>
+
+
+
+<!-- =========================================
+     MODAL — PRÊMIO
+========================================== -->
+
+<dialog id="awardDialog">
+
+    <form
+        id="awardForm"
+        class="modal-form"
+    >
+
+        <div class="modal-head">
+
+            <h2>
+                Prêmio individual
+            </h2>
+
+
+            <button
+                type="button"
+                class="icon-btn"
+                data-close="awardDialog"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <input
+            type="hidden"
+            id="awardId"
+        >
+
+
+        <div class="form-grid">
+
+            <label>
+
+                Tipo
+
+                <select id="awardCategory"><option value="individual">Prêmio individual</option><option value="recognition">Reconhecimento de desempenho</option></select>
+
+            </label>
+
+            <label>
+
+                Prêmio
+
+                <input
+                    id="awardName"
+                    required
+                    placeholder="Melhor do Mundo"
+                >
+
+            </label>
+
+
+            <label>
+
+                Temporada
+
+                <input
+                    id="awardSeason"
+                >
+
+            </label>
+
+
+            <label>
+
+                Clube / Seleção
+
+                <input id="awardClub">
+
+            </label>
+
+            <label>
+
+                Competição / Liga / Âmbito
+
+                <input id="awardCompetition" placeholder="Premier League, Mundial, UEFA...">
+
+            </label>
+
+            <label>
+
+                Quantidade
+
+                <input
+                    id="awardCount"
+                    type="number"
+                    min="1"
+                    value="1"
+                >
+
+            </label>
+
+        </div>
+
+
+        <label>
+
+            Descrição
+
+            <textarea
+                id="awardNotes"
+                rows="3"
+            ></textarea>
+
+        </label>
+
+
+
+        <div class="photo-upload-row">
+
+            <img
+                id="awardPhotoPreview"
+                class="thumb large"
+                alt=""
+            >
+
+
+            <label class="upload-box">
+
+                📷 Foto do prêmio
+
+                <input
+                    id="awardPhoto"
+                    type="file"
+                    accept="image/*"
+                    hidden
+                >
+
+            </label>
+
+        </div>
+
+
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="ghost"
+                data-close="awardDialog"
+            >
+                Cancelar
+            </button>
+
+
+            <button
+                class="primary"
+                type="submit"
+            >
+                Salvar prêmio
+            </button>
+
+        </div>
+
+    </form>
+
+</dialog>
+
+
+
+<!-- =========================================
+     MODAL — GALERIA
+========================================== -->
+
+<dialog id="galleryDialog">
+
+    <form
+        id="galleryForm"
+        class="modal-form"
+    >
+
+        <div class="modal-head">
+
+            <h2>
+                Foto da galeria
+            </h2>
+
+
+            <button
+                type="button"
+                class="icon-btn"
+                data-close="galleryDialog"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <input
+            type="hidden"
+            id="galleryId"
+        >
+
+
+        <label>Categoria<select id="galleryCategory"><option value="career">Foto da Carreira do Clube</option><option value="important">Momento Importante / Premiação</option></select></label>
+
+        <div class="form-grid">
+
+            <label>
+
+                Clube/time
+
+                <input
+                    id="galleryClub"
+                    required
+                    placeholder="Atlético-MG"
+                >
+
+            </label>
+
+
+            <label>
+
+                Temporada
+
+                <input
+                    id="gallerySeason"
+                    placeholder="2028/29"
+                >
+
+            </label>
+
+        </div>
+
+
+        <label>
+
+            Título/legenda
+
+            <input
+                id="galleryTitle"
+                placeholder="Minha primeira temporada"
+            >
+
+        </label>
+
+
+        <label>
+
+            Descrição
+
+            <textarea
+                id="galleryNotes"
+                rows="3"
+            ></textarea>
+
+        </label>
+
+
+
+        <div class="photo-upload-row">
+
+            <img
+                id="galleryPhotoPreview"
+                class="thumb large"
+                alt=""
+            >
+
+
+            <label class="upload-box">
+
+                📷 Escolher foto
+
+                <input
+                    id="galleryPhoto"
+                    type="file"
+                    accept="image/*"
+                    hidden
+                >
+
+            </label>
+
+        </div>
+
+
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                class="ghost"
+                data-close="galleryDialog"
+            >
+                Cancelar
+            </button>
+
+
+            <button
+                class="primary"
+                type="submit"
+            >
+                Salvar foto
+            </button>
+
+        </div>
+
+    </form>
+
+</dialog>
+
+
+
+
+<!-- =========================================
+     MODAL — CATEGORIA DE PRÊMIO DAS ESTATÍSTICAS
+========================================== -->
+<dialog id="statsAwardCategoryDialog">
+    <form id="statsAwardCategoryForm" class="modal-form">
+        <div class="modal-head">
+            <h2 id="statsAwardCategoryTitle">Adicionar prêmio</h2>
+            <button type="button" class="icon-btn" data-close="statsAwardCategoryDialog">×</button>
+        </div>
+        <input type="hidden" id="statsAwardCategoryId">
+        <label>
+            Nome do prêmio
+            <input id="statsAwardCategoryName" required placeholder="Melhor Jogador da UEFA">
+        </label>
+        <label>
+            Observação
+            <textarea id="statsAwardCategoryNotes" rows="3" placeholder="Opcional"></textarea>
+        </label>
+        <div class="modal-actions">
+            <button type="button" class="ghost" data-close="statsAwardCategoryDialog">Cancelar</button>
+            <button class="primary" type="submit">Salvar</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- =========================================
+     MODAL — ESTATÍSTICA DE SELEÇÃO
+========================================== -->
+<dialog id="selectionStatDialog">
+    <form id="selectionStatForm" class="modal-form">
+        <div class="modal-head">
+            <h2 id="selectionStatDialogTitle">Adicionar seleção</h2>
+            <button type="button" class="icon-btn" data-close="selectionStatDialog">×</button>
+        </div>
+        <input type="hidden" id="selectionStatId">
+        <div class="form-grid">
+            <label>
+                Jogador
+                <input id="selectionStatPlayer" required placeholder="Nome do jogador">
+            </label>
+            <label>
+                Seleção
+                <input id="selectionStatName" required placeholder="Brasil">
+            </label>
+            <label>
+                Jogos
+                <input id="selectionStatGames" type="number" min="0" value="0">
+            </label>
+            <label>
+                Gols
+                <input id="selectionStatGoals" type="number" min="0" value="0">
+            </label>
+            <label>
+                Assistências
+                <input id="selectionStatAssists" type="number" min="0" value="0">
+            </label>
+            <label>
+                Foto do jogador
+                <input id="selectionStatPhoto" type="file" accept="image/*">
+                <img id="selectionStatPhotoPreview" alt="Prévia" style="display:none;max-width:56px;max-height:56px;margin-top:8px;object-fit:contain;border-radius:8px;">
+            </label>
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="ghost" data-close="selectionStatDialog">Cancelar</button>
+            <button class="primary" type="submit">Salvar seleção</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- =========================================
+     MODAL — ESTATÍSTICA PERSONALIZADA
+========================================== -->
+<dialog id="customStatDialog">
+    <form id="customStatForm" class="modal-form">
+        <div class="modal-head">
+            <h2 id="customStatDialogTitle">Adicionar estatística</h2>
+            <button type="button" class="icon-btn" data-close="customStatDialog">×</button>
+        </div>
+        <input type="hidden" id="customStatId">
+        <div class="form-grid">
+            <label>
+                Nome da estatística
+                <input id="customStatName" required placeholder="Jogador com mais assistências">
+            </label>
+            <label>
+                Valor
+                <input id="customStatValue" required placeholder="125">
+            </label>
+        </div>
+        <label>
+            Descrição
+            <textarea id="customStatNotes" rows="3" placeholder="Ex.: Nome do jogador, temporada, clube..."></textarea>
+        </label>
+        <div class="modal-actions">
+            <button type="button" class="ghost" data-close="customStatDialog">Cancelar</button>
+            <button class="primary" type="submit">Salvar</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- =========================================
+     MODAL — HISTÓRIA
+========================================== -->
+<dialog id="historyDialog">
+    <form id="historyForm" class="modal-form">
+        <div class="modal-head">
+            <h2 id="historyDialogTitle">Adicionar história</h2>
+            <button type="button" class="icon-btn" data-close="historyDialog">×</button>
+        </div>
+        <input type="hidden" id="historyId">
+
+        <label>
+            Jogador da carreira
+            <select id="historyCareer">
+                <option value="">História independente</option>
+            </select>
+        </label>
+
+        <div class="form-grid">
+            <label>
+                Nome do jogador
+                <input id="historyName" required placeholder="Nome do jogador">
+            </label>
+            <label>
+                Posição
+                <input id="historyPosition" placeholder="ATA">
+            </label>
+            <label>
+                Nacionalidade
+                <input id="historyNation" placeholder="🇧🇷 Brasil">
+            </label>
+            <label>
+                Período
+                <input id="historyPeriod" placeholder="2028 — 2042">
+            </label>
+            <label>
+                Jogos
+                <input id="historyGames" type="number" min="0" value="0">
+            </label>
+            <label>
+                Gols
+                <input id="historyGoals" type="number" min="0" value="0">
+            </label>
+            <label>
+                Assistências
+                <input id="historyAssists" type="number" min="0" value="0">
+            </label>
+            <label>
+                Títulos
+                <input id="historyTitles" type="number" min="0" value="0">
+            </label>
+        </div>
+
+        <label>
+            Foto do jogador
+            <input id="historyPhoto" type="file" accept="image/*">
+        </label>
+
+        <label>
+            História / trajetória
+            <textarea id="historyStory" rows="7" placeholder="Conte a história e os principais momentos do jogador..."></textarea>
+        </label>
+
+        <div class="modal-actions">
+            <button type="button" class="ghost" data-close="historyDialog">Cancelar</button>
+            <button class="primary" type="submit">Salvar história</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- =========================================
+     MODAL — ITEM DA PRATELEIRA
+========================================== -->
+<dialog id="shelfItemDialog">
+    <form id="shelfItemForm" class="modal-form">
+        <div class="modal-head">
+            <h2>Adicionar item à prateleira</h2>
+            <button type="button" class="icon-btn" data-close="shelfItemDialog">×</button>
+        </div>
+        <label>Tipo
+            <select id="shelfItemType">
+                <option value="trophy">Troféu</option>
+                <option value="award">Prêmio Individual</option>
+                <option value="shield">Escudo do Time</option>
+            </select>
+        </label>
+        <label>Nome
+            <input id="shelfItemName" required placeholder="Ex.: Campeonato Brasileiro">
+        </label>
+        <div class="form-grid">
+            <label>Temporada
+                <input id="shelfItemSeason" placeholder="2025">
+            </label>
+            <label>Prateleira
+                <select id="shelfItemRow">
+                    <option value="0">Superior</option>
+                    <option value="1">Central</option>
+                    <option value="2">Inferior</option>
+                    <option value="3">Escudos — abaixo da prateleira</option>
+                </select>
+            </label>
+        </div>
+        <label>Foto / escudo
+            <input id="shelfItemPhoto" type="file" accept="image/*" required>
+        </label>
+        <div class="modal-actions">
+            <button type="button" class="ghost" data-close="shelfItemDialog">Cancelar</button>
+            <button class="primary" type="submit">Salvar item</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- =========================================
+     MODAL — HISTÓRIA DA CARREIRA
+========================================== -->
+<dialog id="careerHistoryDialog">
+    <form id="careerHistoryForm" class="modal-form">
+        <div class="modal-head">
+            <h2 id="careerHistoryDialogTitle">Adicionar história</h2>
+            <button type="button" class="icon-btn" data-close="careerHistoryDialog">×</button>
+        </div>
+        <input type="hidden" id="careerHistoryId">
+        <label>Título da história
+            <input id="careerHistoryTitle" required placeholder="Ex.: A chegada ao profissional">
+        </label>
+        <label>Temporada / período
+            <input id="careerHistoryPeriod" placeholder="2025 — 2026">
+        </label>
+        <label>Foto
+            <input id="careerHistoryPhoto" type="file" accept="image/*">
+        </label>
+        <label>Trajetória / história
+            <textarea id="careerHistoryStory" rows="8" placeholder="Conte o que aconteceu nessa fase da carreira..."></textarea>
+        </label>
+        <div class="modal-actions">
+            <button type="button" class="ghost" data-close="careerHistoryDialog">Cancelar</button>
+            <button class="primary" type="submit">Salvar história</button>
+        </div>
+    </form>
+</dialog>
+
+<!-- =========================================
+     TOAST
+========================================== -->
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
+
+
+<!-- JAVASCRIPT -->
+
+<script src="js/app.js"></script>
+<script src="js/backup.js"></script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", function () {
+                navigator.serviceWorker.register("./sw.js");
+            });
+        }
+    </script>
+</body>
+</html>

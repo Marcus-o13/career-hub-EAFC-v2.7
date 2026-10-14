@@ -1,0 +1,6 @@
+{
+  "cleanUrls": false,
+  "rewrites": [
+    { "source": "/mesa-tatica", "destination": "/mesa-tatica.html" }
+  ]
+}

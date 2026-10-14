@@ -1,0 +1,1241 @@
+:root {
+    --cor-time: #00a859;
+    --fundo: #101010;
+    --painel: #191919;
+    --card: #242424;
+    --texto: #ffffff;
+    --texto-secundario: #aaaaaa;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+
+body {
+    background: var(--fundo);
+    color: var(--texto);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.header {
+    min-height: 80px;
+
+    padding: 15px 30px;
+
+    background: #151515;
+
+    border-bottom:
+        2px solid var(--cor-time);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+
+.logo {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.logo span {
+    font-size: 30px;
+}
+
+
+.logo h1 {
+    font-size: 24px;
+}
+
+
+.configuracoes {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.configuracoes input[type="text"],
+.configuracoes select {
+    background: #252525;
+
+    color: white;
+
+    border: 1px solid #444;
+
+    border-radius: 6px;
+
+    padding: 10px;
+
+    outline: none;
+}
+
+
+.cor-label {
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    color: #aaa;
+}
+
+
+#corTime {
+    width: 40px;
+
+    height: 35px;
+
+    border: none;
+
+    cursor: pointer;
+
+    background: transparent;
+}
+
+
+/* =========================================
+   IDENTIDADE
+========================================= */
+
+.identidade-time {
+    min-height: 140px;
+
+    background: #171717;
+
+    border-bottom: 1px solid #292929;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 40px;
+
+    padding: 20px;
+}
+
+
+.escudo-area,
+.treinador-area {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+}
+
+
+.escudo-area {
+    flex-direction: column;
+}
+
+
+.imagem-placeholder {
+    width: 80px;
+
+    height: 80px;
+
+    border:
+        2px dashed var(--cor-time);
+
+    border-radius: 10px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    position: relative;
+
+    background: #202020;
+}
+
+
+.imagem-placeholder > span {
+    font-size: 35px;
+
+    position: absolute;
+
+    z-index: 1;
+}
+
+
+.imagem-placeholder img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: contain;
+
+    position: relative;
+
+    z-index: 2;
+
+    display: none;
+}
+
+
+.treinador-placeholder {
+    border-radius: 50%;
+}
+
+
+.treinador-placeholder img {
+    object-fit: cover;
+}
+
+
+.nome-time {
+    text-align: center;
+
+    min-width: 160px;
+}
+
+
+.nome-time h2 {
+    font-size: 28px;
+
+    margin-bottom: 5px;
+}
+
+
+.nome-time span {
+    color: var(--cor-time);
+
+    font-weight: bold;
+
+    font-size: 12px;
+}
+
+
+.treinador-area {
+    flex-direction: row;
+}
+
+
+.treinador-info {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+
+.treinador-info span {
+    color: #777;
+
+    font-size: 10px;
+}
+
+
+.treinador-info strong {
+    font-size: 15px;
+}
+
+
+/* =========================================
+   BOTÕES
+========================================= */
+
+.upload-button {
+    display: inline-block;
+
+    padding: 6px 10px;
+
+    border-radius: 5px;
+
+    background: var(--cor-time);
+
+    color: white;
+
+    font-size: 11px;
+
+    cursor: pointer;
+
+    text-align: center;
+}
+
+
+.upload-button:hover {
+    opacity: .85;
+}
+
+
+.btn-principal {
+    width: 100%;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: var(--cor-time);
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.container {
+    width: 100%;
+
+    max-width: 1400px;
+
+    margin: 30px auto;
+
+    padding: 0 20px;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(500px, 850px)
+        300px;
+
+    gap: 30px;
+
+    justify-content: center;
+}
+
+
+/* =========================================
+   CAMPO
+========================================= */
+
+.campo {
+    position: relative;
+
+    width: 100%;
+
+    aspect-ratio: 1.55;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #167c3a 0,
+            #167c3a 60px,
+            #198542 60px,
+            #198542 120px
+        );
+
+    border: 4px solid white;
+
+    overflow: hidden;
+
+    touch-action: none;
+
+    user-select: none;
+}
+
+
+.meio-campo {
+    position: absolute;
+
+    top: 50%;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 2px;
+
+    background: rgba(
+        255,
+        255,
+        255,
+        .8
+    );
+}
+
+
+.circulo-central {
+    position: absolute;
+
+    top: 50%;
+
+    left: 50%;
+
+    width: 110px;
+
+    height: 110px;
+
+    transform:
+        translate(-50%, -50%);
+
+    border:
+        2px solid rgba(
+            255,
+            255,
+            255,
+            .8
+        );
+
+    border-radius: 50%;
+}
+
+
+.area {
+    position: absolute;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    width: 35%;
+
+    height: 18%;
+
+    border:
+        2px solid rgba(
+            255,
+            255,
+            255,
+            .8
+        );
+}
+
+
+.area-superior {
+    top: 0;
+}
+
+
+.area-inferior {
+    bottom: 0;
+}
+
+
+.gol {
+    position: absolute;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    width: 12%;
+
+    height: 5%;
+
+    border: 3px solid white;
+}
+
+
+.gol-superior {
+    top: -1px;
+}
+
+
+.gol-inferior {
+    bottom: -1px;
+}
+
+
+.nome-time-campo {
+    position: absolute;
+
+    top: 10px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    padding: 5px 12px;
+
+    background:
+        rgba(0,0,0,.45);
+
+    border-radius: 20px;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+
+    z-index: 2;
+}
+
+
+/* =========================================
+   JOGADOR NO CAMPO
+========================================= */
+
+.jogador-campo {
+    position: absolute;
+
+    transform:
+        translate(-50%, -50%);
+
+    width: 80px;
+
+    text-align: center;
+
+    cursor: grab;
+
+    z-index: 10;
+
+    user-select: none;
+
+    touch-action: none;
+}
+
+
+.jogador-campo:active {
+    cursor: grabbing;
+
+    transform:
+        translate(-50%, -50%)
+        scale(1.1);
+}
+
+
+.jogador-campo img {
+    width: 55px;
+
+    height: 55px;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    border:
+        3px solid var(--cor-time);
+
+    background: #222;
+
+    display: block;
+
+    margin: auto;
+
+    pointer-events: none;
+}
+
+
+.jogador-campo span {
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    text-shadow:
+        0 1px 3px #000;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.jogador-campo small {
+    display: block;
+
+    font-size: 9px;
+
+    color: white;
+}
+
+
+/* =========================================
+   PAINEL
+========================================= */
+
+.painel {
+    background: var(--painel);
+
+    border-radius: 10px;
+
+    padding: 20px;
+
+    height: fit-content;
+}
+
+
+.painel h2 {
+    margin-bottom: 15px;
+
+    font-size: 18px;
+}
+
+
+.lista-jogadores {
+    margin-top: 15px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+.card-jogador {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    background: var(--card);
+
+    padding: 10px;
+
+    border-radius: 7px;
+}
+
+
+.card-jogador img {
+    width: 50px;
+
+    height: 50px;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    border:
+        2px solid var(--cor-time);
+
+    flex-shrink: 0;
+}
+
+
+.info-jogador {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+    min-width: 0;
+
+    flex: 1;
+}
+
+
+.info-jogador strong {
+    font-size: 13px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.info-jogador span {
+    color: #aaa;
+
+    font-size: 11px;
+}
+
+
+.btn-escalar,
+.btn-banco,
+.btn-excluir {
+    border: none;
+
+    padding: 6px 8px;
+
+    border-radius: 5px;
+
+    color: white;
+
+    cursor: pointer;
+
+    flex-shrink: 0;
+}
+
+
+.btn-escalar {
+    background: var(--cor-time);
+}
+
+
+.btn-banco {
+    background: #555;
+}
+
+
+.btn-excluir {
+    background: #c62828;
+
+    font-size: 14px;
+}
+
+
+.btn-excluir:hover {
+    background: #a51f1f;
+}
+
+
+/* =========================================
+   BANCO
+========================================= */
+
+.reservas {
+    width: 100%;
+
+    max-width: 1400px;
+
+    margin: 0 auto 40px;
+
+    padding: 20px;
+}
+
+
+.titulo-reservas {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 15px;
+}
+
+
+.titulo-reservas h2 {
+    font-size: 20px;
+}
+
+
+.titulo-reservas span {
+    color: #777;
+
+    font-size: 13px;
+}
+
+
+.banco-jogadores {
+    min-height: 120px;
+
+    padding: 15px;
+
+    background: #181818;
+
+    border: 1px solid #292929;
+
+    border-radius: 10px;
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+}
+
+
+.reserva-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    background: var(--card);
+
+    padding: 10px;
+
+    border-radius: 8px;
+
+    min-width: 220px;
+}
+
+
+.reserva-card img {
+    width: 60px;
+
+    height: 60px;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    border:
+        2px solid var(--cor-time);
+}
+
+
+.reserva-info {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    min-width: 0;
+
+    flex: 1;
+}
+
+
+.reserva-info strong {
+    font-size: 13px;
+}
+
+
+.reserva-info span {
+    font-size: 11px;
+
+    color: #aaa;
+}
+
+
+/* =========================================
+   FORMULÁRIO
+========================================= */
+
+.formulario-jogador {
+    position: fixed;
+
+    top: 50%;
+
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    width: 350px;
+
+    max-width:
+        calc(100% - 30px);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 25px;
+
+    background: #202020;
+
+    border:
+        2px solid var(--cor-time);
+
+    border-radius: 10px;
+
+    z-index: 100;
+
+    display: none;
+}
+
+
+.formulario-jogador h3 {
+    margin-bottom: 15px;
+}
+
+
+.formulario-jogador form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+.formulario-jogador input,
+.formulario-jogador select {
+    width: 100%;
+
+    padding: 10px;
+
+    border: none;
+
+    border-radius: 5px;
+
+    background: #303030;
+
+    color: white;
+
+    outline: none;
+}
+
+
+.formulario-jogador label {
+    font-size: 12px;
+
+    color: #aaa;
+}
+
+
+.botoes-formulario {
+    display: flex;
+
+    gap: 10px;
+}
+
+
+.botoes-formulario button {
+    flex: 1;
+
+    padding: 10px;
+
+    border: none;
+
+    border-radius: 5px;
+
+    background: var(--cor-time);
+
+    color: white;
+
+    cursor: pointer;
+}
+
+
+.botoes-formulario button:last-child {
+    background: #555;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1000px) {
+
+    .header {
+        flex-direction: column;
+    }
+
+
+    .configuracoes {
+        flex-wrap: wrap;
+
+        justify-content: center;
+    }
+
+
+    .container {
+        grid-template-columns: 1fr;
+
+        max-width: 900px;
+    }
+
+
+    .painel {
+        width: 100%;
+    }
+}
+
+
+/* =========================================
+   CELULAR
+========================================= */
+
+@media (max-width: 600px) {
+
+    .header {
+        padding: 12px;
+    }
+
+
+    .logo {
+        justify-content: center;
+    }
+
+
+    .logo h1 {
+        font-size: 20px;
+    }
+
+
+    .configuracoes {
+        width: 100%;
+
+        display: grid;
+
+        grid-template-columns:
+            1fr 100px;
+    }
+
+
+    .configuracoes input[type="text"] {
+        grid-column: 1 / 3;
+
+        width: 100%;
+
+        font-size: 16px;
+    }
+
+
+    .configuracoes select {
+        width: 100%;
+
+        font-size: 16px;
+    }
+
+
+    .identidade-time {
+        padding: 15px 8px;
+
+        gap: 10px;
+
+        display: grid;
+
+        grid-template-columns:
+            65px 1fr 65px;
+    }
+
+
+    .imagem-placeholder {
+        width: 60px;
+
+        height: 60px;
+    }
+
+
+    .nome-time {
+        min-width: 0;
+    }
+
+
+    .nome-time h2 {
+        font-size: 19px;
+    }
+
+
+    .treinador-area {
+        flex-direction: column;
+
+        gap: 4px;
+    }
+
+
+    .treinador-info {
+        align-items: center;
+    }
+
+
+    .treinador-info span {
+        display: none;
+    }
+
+
+    .treinador-info strong {
+        max-width: 70px;
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+
+        white-space: nowrap;
+
+        font-size: 10px;
+    }
+
+
+    .container {
+        display: flex;
+
+        flex-direction: column;
+
+        margin: 15px auto;
+
+        padding: 0 8px;
+
+        gap: 15px;
+    }
+
+
+    .campo {
+        aspect-ratio: .68;
+
+        border-width: 3px;
+    }
+
+
+    .circulo-central {
+        width: 75px;
+
+        height: 75px;
+    }
+
+
+    .jogador-campo {
+        width: 62px;
+    }
+
+
+    .jogador-campo img {
+        width: 42px;
+
+        height: 42px;
+
+        border-width: 2px;
+    }
+
+
+    .jogador-campo span {
+        font-size: 8px;
+    }
+
+
+    .jogador-campo small {
+        font-size: 7px;
+    }
+
+
+    .reservas {
+        padding: 15px 8px 30px;
+    }
+
+
+    .banco-jogadores {
+        display: grid;
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .reserva-card {
+        width: 100%;
+
+        min-width: 0;
+    }
+
+
+    .formulario-jogador {
+        width:
+            calc(100% - 30px);
+
+        padding: 20px;
+    }
+
+
+    .formulario-jogador input,
+    .formulario-jogador select {
+        font-size: 16px;
+
+        padding: 12px;
+    }
+
+}
+
+/* ==========================================
+   UNIFORMES — ADIÇÃO
+========================================== */
+
+.uniformes-area {
+    width: min(1100px, 94%);
+    margin: 18px auto 0;
+    padding: 18px;
+    border-radius: 16px;
+    background: rgba(18, 25, 22, .92);
+    border: 1px solid rgba(255,255,255,.12);
+}
+
+.uniformes-titulo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.uniformes-titulo strong {
+    font-size: 1rem;
+}
+
+.uniformes-titulo span {
+    color: #aaa;
+    font-size: .75rem;
+}
+
+.uniformes-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(110px, 1fr));
+    gap: 12px;
+}
+
+.uniforme-item {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.035);
+}
+
+.uniforme-item img {
+    width: 100%;
+    height: 120px;
+    object-fit: contain;
+    border-radius: 10px;
+    background: rgba(0,0,0,.18);
+    display: none;
+}
+
+.uniforme-item img:not([src=""]) {
+    display: block;
+}
+
+.uniforme-item > span {
+    font-weight: 700;
+    font-size: .8rem;
+}
+
+@media (max-width: 760px) {
+    .uniformes-grid {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+    }
+}

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Mesa Tática</title>
+
+    <link
+        rel="stylesheet"
+        href="css/mesa-tatica.css"
+    >
+
+</head>
+
+<body>
+
+    <!-- =========================================
+         CABEÇALHO
+    ========================================== -->
+
+    <header class="header">
+
+        <div class="logo">
+
+            <span>⚽</span>
+
+            <h1>Mesa Tática</h1>
+
+        </div>
+
+
+        <div class="configuracoes">
+
+            <input
+                type="text"
+                id="nomeTime"
+                placeholder="Nome do time"
+            >
+
+            <select id="formacao">
+
+                <option value="4-3-3">4-3-3</option>
+
+                <option value="4-4-2">4-4-2</option>
+
+                <option value="4-2-3-1">
+                    4-2-3-1
+                </option>
+
+                <option value="3-5-2">3-5-2</option>
+
+                <option value="3-4-3">3-4-3</option>
+
+                <option value="5-3-2">5-3-2</option>
+
+                <option value="4-2-4">4-2-4</option>
+
+            </select>
+
+
+            <label class="cor-label">
+
+                Cor:
+
+                <input
+                    type="color"
+                    id="corTime"
+                    value="#00a859"
+                >
+
+            </label>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================
+         IDENTIDADE DO TIME
+    ========================================== -->
+
+    <section class="identidade-time">
+
+
+        <!-- ESCUDO -->
+
+        <div class="escudo-area">
+
+            <div
+                class="imagem-placeholder escudo-placeholder"
+            >
+
+                <span id="escudoIcone">
+                    🛡️
+                </span>
+
+                <img
+                    id="imagemEscudo"
+                    src=""
+                    alt="Escudo do time"
+                >
+
+            </div>
+
+
+            <label
+                for="escudoTime"
+                class="upload-button"
+            >
+                Escolher escudo
+            </label>
+
+
+            <input
+                type="file"
+                id="escudoTime"
+                accept="image/*"
+                hidden
+            >
+
+        </div>
+
+
+        <!-- NOME DO TIME -->
+
+        <div class="nome-time">
+
+            <h2 id="tituloTime">
+                Meu Time
+            </h2>
+
+            <span>
+                MESA TÁTICA
+            </span>
+
+        </div>
+
+
+        <!-- TREINADOR -->
+
+        <div class="treinador-area">
+
+            <div class="foto-treinador">
+
+                <div
+                    class="imagem-placeholder treinador-placeholder"
+                >
+
+                    <span id="treinadorIcone">
+                        👔
+                    </span>
+
+                    <img
+                        id="imagemTreinador"
+                        src=""
+                        alt="Foto do treinador"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="treinador-info">
+
+                <span>
+                    TREINADOR
+                </span>
+
+                <strong id="nomeTreinador">
+                    Meu Treinador
+                </strong>
+
+
+                <label
+                    for="fotoTreinador"
+                    class="upload-button"
+                >
+                    Foto
+                </label>
+
+
+                <input
+                    type="file"
+                    id="fotoTreinador"
+                    accept="image/*"
+                    hidden
+                >
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         UNIFORMES
+    ========================================== -->
+
+    <section class="uniformes-area">
+
+        <div class="uniformes-titulo">
+            <strong>👕 Uniformes</strong>
+            <span>Adicione somente os uniformes que o time tiver</span>
+        </div>
+
+        <div class="uniformes-grid">
+
+            <div class="uniforme-item">
+                <img id="imagemUniformeGoleiro" alt="Uniforme goleiro">
+                <span>Goleiro</span>
+                <label for="uniformeGoleiro" class="upload-button">Foto</label>
+                <input type="file" id="uniformeGoleiro" accept="image/*" hidden>
+            </div>
+
+            <div id="uniformesAdicionados" class="uniformes-grid" style="display:contents;"></div>
+
+            <div class="uniforme-adicionar">
+                <button type="button" class="btn-principal" id="btnAdicionarUniforme">
+                    + Adicionar uniforme
+                </button>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- =========================================
+         CONTEÚDO
+    ========================================== -->
+
+    <main class="container">
+
+
+        <!-- CAMPO -->
+
+        <section class="campo-container">
+
+            <div
+                class="campo"
+                id="campo"
+            >
+
+                <div
+                    class="nome-time-campo"
+                    id="nomeTimeCampo"
+                >
+                    MEU TIME
+                </div>
+
+
+                <div class="meio-campo"></div>
+
+                <div class="circulo-central"></div>
+
+                <div
+                    class="area area-superior"
+                ></div>
+
+                <div
+                    class="area area-inferior"
+                ></div>
+
+                <div
+                    class="gol gol-superior"
+                ></div>
+
+                <div
+                    class="gol gol-inferior"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PAINEL DE JOGADORES -->
+
+        <aside class="painel">
+
+            <h2>
+                👥 Jogadores
+            </h2>
+
+
+            <button
+                class="btn-principal"
+                id="btnAdicionarJogador"
+                type="button"
+            >
+                + Adicionar jogador
+            </button>
+
+
+            <div
+                class="lista-jogadores"
+                id="listaJogadores"
+            ></div>
+
+        </aside>
+
+    </main>
+
+
+    <!-- =========================================
+         BANCO
+    ========================================== -->
+
+    <section class="reservas">
+
+        <div class="titulo-reservas">
+
+            <h2>
+                🪑 Banco de reservas
+            </h2>
+
+            <span>
+                Jogadores disponíveis
+            </span>
+
+        </div>
+
+
+        <div
+            class="banco-jogadores"
+            id="bancoJogadores"
+        ></div>
+
+    </section>
+
+
+    <!-- =========================================
+         FORMULÁRIO
+    ========================================== -->
+
+    <div
+        class="formulario-jogador"
+        id="formularioJogador"
+    >
+
+        <h3>
+            ⚽ Adicionar jogador
+        </h3>
+
+
+        <form id="formJogador">
+
+            <input
+                type="text"
+                id="nomeJogador"
+                placeholder="Nome do jogador"
+                required
+            >
+
+
+            <select
+                id="nacionalidade"
+                required
+            >
+
+                <option value="">
+                    Nacionalidade
+                </option>
+
+                <option value="Brasil">
+                    🇧🇷 Brasil
+                </option>
+
+                <option value="Argentina">
+                    🇦🇷 Argentina
+                </option>
+
+                <option value="Uruguai">
+                    🇺🇾 Uruguai
+                </option>
+
+                <option value="Chile">
+                    🇨🇱 Chile
+                </option>
+
+                <option value="Colômbia">
+                    🇨🇴 Colômbia
+                </option>
+
+                <option value="Paraguai">
+                    🇵🇾 Paraguai
+                </option>
+
+                <option value="Peru">
+                    🇵🇪 Peru
+                </option>
+
+                <option value="Portugal">
+                    🇵🇹 Portugal
+                </option>
+
+                <option value="Espanha">
+                    🇪🇸 Espanha
+                </option>
+
+                <option value="França">
+                    🇫🇷 França
+                </option>
+
+                <option value="Inglaterra">
+                    🏴 Inglaterra
+                </option>
+
+                <option value="Alemanha">
+                    🇩🇪 Alemanha
+                </option>
+
+                <option value="Itália">
+                    🇮🇹 Itália
+                </option>
+
+                <option value="Holanda">
+                    🇳🇱 Holanda
+                </option>
+
+                <option value="Bélgica">
+                    🇧🇪 Bélgica
+                </option>
+
+                <option value="Croácia">
+                    🇭🇷 Croácia
+                </option>
+
+                <option value="Estados Unidos">
+                    🇺🇸 Estados Unidos
+                </option>
+
+                <option value="México">
+                    🇲🇽 México
+                </option>
+
+                <option value="Japão">
+                    🇯🇵 Japão
+                </option>
+
+                <option value="Coreia do Sul">
+                    🇰🇷 Coreia do Sul
+                </option>
+
+            </select>
+
+
+            <select
+                id="posicao"
+                required
+            >
+
+                <option value="">
+                    Posição
+                </option>
+
+                <option value="GOL">
+                    Goleiro
+                </option>
+
+                <option value="ZAG">
+                    Zagueiro
+                </option>
+
+                <option value="LE">
+                    Lateral Esquerdo
+                </option>
+
+                <option value="LD">
+                    Lateral Direito
+                </option>
+
+                <option value="VOL">
+                    Volante
+                </option>
+
+                <option value="MC">
+                    Meio-campo
+                </option>
+
+                <option value="MEI">
+                    Meia
+                </option>
+
+                <option value="PE">
+                    Ponta Esquerda
+                </option>
+
+                <option value="PD">
+                    Ponta Direita
+                </option>
+
+                <option value="SA">
+                    Segundo Atacante
+                </option>
+
+                <option value="ATA">
+                    Atacante
+                </option>
+
+            </select>
+
+
+            <label>
+                Foto do jogador
+            </label>
+
+            <input
+                type="file"
+                id="fotoJogador"
+                accept="image/*"
+            >
+
+
+            <div class="botoes-formulario">
+
+                <button
+                    type="submit"
+                >
+                    Adicionar
+                </button>
+
+
+                <button
+                    type="button"
+                    id="btnCancelar"
+                >
+                    Cancelar
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+<script src="js/mesa-tatica.js"></script>
+
+</body>
+
+</html>

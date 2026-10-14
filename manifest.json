@@ -1,0 +1,10 @@
+{
+  "name": "Career Hub — Futebol",
+  "short_name": "Career Hub",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#080b0f",
+  "theme_color": "#080b0f",
+  "lang": "pt-BR"
+}
