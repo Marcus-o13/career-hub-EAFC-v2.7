@@ -1,7 +1,7 @@
 /* Career Hub — Service Worker
-   v13: importação sem duplicação de backup + visualizador de imagens.
+   v14: importação IndexedDB-first para backups grandes no iPhone + visualizador de imagens.
 */
-const CACHE = "career-hub-v13-gallery-import-fix";
+const CACHE = "career-hub-v14-ios-quota-fix";
 const FILES = [
   "./",
   "./index.html",

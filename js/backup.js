@@ -225,35 +225,80 @@
     db.close();
   }
 
+  async function storageEstimate() {
+    try {
+      if (navigator.storage && typeof navigator.storage.estimate === "function") {
+        const estimate = await navigator.storage.estimate();
+        return {
+          usage: Number(estimate.usage || 0),
+          quota: Number(estimate.quota || 0),
+          available: Math.max(0, Number(estimate.quota || 0) - Number(estimate.usage || 0))
+        };
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  function formatBytes(bytes) {
+    if (!Number.isFinite(bytes) || bytes <= 0) return "desconhecido";
+    const units = ["B", "KB", "MB", "GB", "TB"];
+    let value = bytes, index = 0;
+    while (value >= 1024 && index < units.length - 1) { value /= 1024; index++; }
+    return `${value.toFixed(index === 0 ? 0 : 1)} ${units[index]}`;
+  }
+
+  function quotaFriendlyError(error) {
+    const name = String(error?.name || "");
+    const message = String(error?.message || error || "");
+    if (/QuotaExceededError|quota has been exceeded|storage quota/i.test(`${name} ${message}`)) {
+      return new Error("O armazenamento disponível do navegador foi excedido durante a importação. O limite não pode ser aumentado pelo código do site. Mantenha o backup original, libere espaço no armazenamento do Safari ou use uma versão com armazenamento externo/sincronização. Seus dados podem precisar ser verificados antes de tentar novamente.");
+    }
+    return error instanceof Error ? error : new Error(message);
+  }
+
   async function applySnapshot(snapshot, options = {}) {
     validateSnapshot(snapshot);
-    // Não duplicar todo o backup (incluindo imagens Base64) no IndexedDB antes da importação.
-    // No iOS isso pode exceder a cota mesmo quando o arquivo selecionado é válido.
-    if (options.saveSafety === true) {
-      const current = await buildSnapshot();
-      await saveSafetyBackup(current);
-    }
 
-    // Valida tudo antes de alterar qualquer dado.
+    // Validar todo o JSON antes de alterar os dados existentes.
     const localEntries = Object.entries(snapshot.localStorage || {});
     for (const [key, value] of localEntries) {
       if (INTERNAL_KEYS.has(key)) continue;
       if (typeof value !== "string") throw new Error(`Valor inválido para a chave ${key}.`);
     }
 
+    // IMPORTANTE PARA SAFARI/iOS: não gravar primeiro os valores grandes no
+    // LocalStorage. Ele tem limites baixos e pode lançar QuotaExceededError
+    // para uma carreira com muitas imagens. O app já lê carreiras/estatísticas
+    // do IndexedDB primeiro, então esse deve ser o armazenamento principal.
+    await writeIndexedDB(snapshot);
+
+    // LocalStorage é apenas compatibilidade/apoio. Não deixe uma cota baixa
+    // impedir a restauração que já foi concluída no IndexedDB.
     const currentKeys = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && !INTERNAL_KEYS.has(key)) currentKeys.push(key);
     }
-
-    for (const key of currentKeys) localStorage.removeItem(key);
-    for (const [key, value] of localEntries) {
-      if (!INTERNAL_KEYS.has(key)) localStorage.setItem(key, value);
+    for (const key of currentKeys) {
+      try { localStorage.removeItem(key); } catch (_) {}
     }
-    await writeIndexedDB(snapshot);
 
-    // Faz a aplicação existente recarregar do armazenamento restaurado.
+    let skipped = 0;
+    for (const [key, value] of localEntries) {
+      if (INTERNAL_KEYS.has(key)) continue;
+      try {
+        localStorage.setItem(key, value);
+      } catch (error) {
+        // Os dados grandes continuam seguros no IndexedDB. Só ignoramos a
+        // cópia secundária do LocalStorage quando o Safari excede sua cota.
+        skipped++;
+        console.warn(`LocalStorage não comportou a chave ${key}; mantida no IndexedDB quando aplicável.`, error);
+      }
+    }
+
+    if (skipped && typeof window.showToast === "function") {
+      window.showToast("Backup restaurado. Alguns dados grandes ficaram somente no armazenamento offline do aplicativo.");
+    }
     window.location.reload();
   }
 
@@ -307,10 +352,24 @@
       );
       if (!ok) return;
 
-      await applySnapshot(snapshot);
+      // Estimativa informativa: Safari pode não expor quota exata e o espaço
+      // necessário depende da estrutura do banco; nunca tratamos isso como garantia.
+      const estimate = await storageEstimate();
+      const fileBytes = Number(file.size || 0);
+      if (estimate && estimate.available > 0 && fileBytes > estimate.available) {
+        const proceed = window.confirm(
+          `Atenção: o arquivo tem ${formatBytes(fileBytes)}, mas o navegador informa aproximadamente ${formatBytes(estimate.available)} disponíveis.\n\nA estimativa não é exata e a importação pode falhar por limite de armazenamento. Mantenha o arquivo original. Deseja tentar mesmo assim?`
+        );
+        if (!proceed) return;
+      }
+      try {
+        await applySnapshot(snapshot);
+      } catch (error) {
+        throw quotaFriendlyError(error);
+      }
     } catch (error) {
       console.error("Importação do Career Hub:", error);
-      alert(`Importação cancelada. Seus dados atuais não foram substituídos.\n\n${error.message || error}`);
+      alert(`Importação não concluída. Mantenha o backup original e não limpe os dados do navegador.\n\n${error.message || error}`);
     }
   }
 
