@@ -1,21 +1,9 @@
-CAREER HUB — EAFC
+CAREER HUB — OFFLINE + IMPORTAR/EXPORTAR MANUAL
 
-Modo atual: 100% local/offline.
+Esta versão não usa Supabase nem exige conta ou nuvem. Use os botões Exportar e Importar para transferir um backup JSON entre computador e celular. Fotos e escudos incluídos no backup acompanham o arquivo.
 
-- Carreiras, jogadores, técnicos, temporadas, títulos, prêmios, histórico e mesa tática ficam no dispositivo.
-- IndexedDB é o armazenamento principal; LocalStorage funciona como apoio.
-- Fotos, escudos e imagens são armazenados como Data URL/Base64 quando adicionados pelo aplicativo.
-- 📤 Exportar cria um JSON completo com os dados locais e as imagens incorporadas.
-- 📥 Importar restaura o JSON priorizando IndexedDB para suportar backups grandes no Safari/iPhone. Mantenha o arquivo original como cópia de segurança.
-- ↩️ Restaurar recupera o backup de segurança criado antes da última importação.
-- Não há sincronização com Supabase, API de nuvem ou token de sincronização.
-- Para levar os dados para outro dispositivo: exporte o JSON no dispositivo atual e importe o mesmo arquivo no outro.
+A galeria com zoom e navegação lateral está incluída.
 
-O aplicativo continua hospedável no Vercel, mas o Vercel serve apenas os arquivos do aplicativo; os dados não são enviados para a nuvem.
+IMPORTANTE: não existe limite de 20 GB garantido pelo aplicativo. O limite real depende do armazenamento do navegador/dispositivo e do tamanho do backup. Backups muito grandes podem exceder a cota do Safari ou exigir muita memória durante a importação. Guarde sempre uma cópia do backup original e teste primeiro com uma cópia.
 
-
-IMPORTANTE SOBRE ESPAÇO:
-- O aplicativo offline usa o armazenamento permitido pelo navegador/dispositivo; não existe configuração que transforme o Safari em armazenamento ilimitado ou garanta gigabytes.
-- O importador mostra uma estimativa de espaço quando o navegador fornece essa informação, mas a estimativa não garante sucesso.
-- Para grandes volumes (centenas de MB/GB) é necessário testar em cada dispositivo; a solução robusta é armazenamento externo/nuvem ou uma aplicação nativa com gestão de ficheiros.
-- Testes automatizados de sintaxe/ZIP não substituem um teste real no iPhone.
+Para atualizar o site, publique a pasta inteira no Vercel.

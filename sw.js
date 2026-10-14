@@ -1,7 +1,7 @@
 /* Career Hub — Service Worker
-   v14: importação IndexedDB-first para backups grandes no iPhone + visualizador de imagens.
+   v17: modo offline, importação/exportação manual e galeria com zoom.
 */
-const CACHE = "career-hub-v14-ios-quota-fix";
+const CACHE = "career-hub-v17-offline-manual-backup";
 const FILES = [
   "./",
   "./index.html",
