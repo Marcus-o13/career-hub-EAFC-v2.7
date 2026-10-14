@@ -1,7 +1,7 @@
 /* Career Hub — Service Worker
-   v12: modo 100% local/offline + backup JSON com fotos incorporadas.
+   v13: importação sem duplicação de backup + visualizador de imagens.
 */
-const CACHE = "career-hub-v12-local-backup";
+const CACHE = "career-hub-v13-gallery-import-fix";
 const FILES = [
   "./",
   "./index.html",
@@ -9,8 +9,10 @@ const FILES = [
   "./manifest.json",
   "./css/style.css",
   "./css/mesa-tatica.css",
+  "./css/gallery-viewer.css",
   "./js/app.js",
   "./js/backup.js",
+  "./js/gallery-viewer.js",
   "./js/mesa-tatica.js"
 ];
 

@@ -225,10 +225,14 @@
     db.close();
   }
 
-  async function applySnapshot(snapshot) {
+  async function applySnapshot(snapshot, options = {}) {
     validateSnapshot(snapshot);
-    const current = await buildSnapshot();
-    await saveSafetyBackup(current);
+    // Não duplicar todo o backup (incluindo imagens Base64) no IndexedDB antes da importação.
+    // No iOS isso pode exceder a cota mesmo quando o arquivo selecionado é válido.
+    if (options.saveSafety === true) {
+      const current = await buildSnapshot();
+      await saveSafetyBackup(current);
+    }
 
     // Valida tudo antes de alterar qualquer dado.
     const localEntries = Object.entries(snapshot.localStorage || {});
@@ -293,21 +297,16 @@
       try { snapshot = JSON.parse(text); } catch (_) { throw new Error("O arquivo não contém JSON válido."); }
       validateSnapshot(snapshot);
 
-      const current = await buildSnapshot();
-      await saveSafetyBackup(current);
-
       const count = Object.keys(snapshot.localStorage || {}).length;
       const ok = window.confirm(
         `Backup válido encontrado.\n\n` +
         `Dados locais: ${count}\n` +
         `Imagens incorporadas: ${Number(snapshot.media?.imageCount || 0)}\n` +
         `Exportado em: ${snapshot.exportedAt ? new Date(snapshot.exportedAt).toLocaleString("pt-BR") : "data não informada"}\n\n` +
-        `A importação substituirá os dados locais atuais. Um backup de segurança já foi criado automaticamente.\n\nContinuar?`
+        `A importação substituirá os dados locais atuais. Para evitar exceder o armazenamento do iPhone, o sistema não criará uma segunda cópia automática do backup dentro do navegador. Mantenha o arquivo original guardado.\n\nContinuar?`
       );
       if (!ok) return;
 
-      // A função cria outro backup de segurança antes da aplicação, mas isso
-      // é intencional: mantém a proteção mesmo se o fluxo for chamado por API.
       await applySnapshot(snapshot);
     } catch (error) {
       console.error("Importação do Career Hub:", error);
