@@ -383,44 +383,12 @@ function normalizeCareer(career) {
 
 function defaultAttributes() {
     return {
-
-        pace: 0,
-        shooting: 0,
-        passing: 0,
-        dribbling: 0,
-        defending: 0,
-        physical: 0,
-
-        finishing: 0,
-        shotPower: 0,
-        longShots: 0,
-        volleys: 0,
-        penalties: 0,
-
-        vision: 0,
-        crossing: 0,
-        freeKick: 0,
-        shortPassing: 0,
-        longPassing: 0,
-        curve: 0,
-
-        agility: 0,
-        balance: 0,
-        reactions: 0,
-        ballControl: 0,
-        composure: 0,
-
-        interceptions: 0,
-        heading: 0,
-        marking: 0,
-        standingTackle: 0,
-        slidingTackle: 0,
-
-        acceleration: 0,
-        stamina: 0,
-        strength: 0,
-        aggression: 0,
-        jumping: 0
+        crossing: 0, finishing: 0, heading: 0, shortPassing: 0, volleys: 8, weakFoot: 0,
+        standingTackle: 0, slidingTackle: 0,
+        dribbling: 0, curve: 0, freeKick: 0, longPassing: 0, ballControl: 0,
+        shotPower: 0, jumping: 0, stamina: 0, strength: 0, longShots: 0,
+        acceleration: 0, sprintSpeed: 0, agility: 0, reactions: 0, balance: 0,
+        aggression: 0, interceptions: 0, positioning: 0, vision: 0, penalties: 0
     };
 }
 
@@ -430,74 +398,32 @@ function defaultAttributes() {
 ========================================================= */
 
 const ATTRIBUTE_GROUPS = [
-
-    {
-        title: "⚡ Ritmo",
-        attributes: [
-            ["pace", "Ritmo"],
-            ["acceleration", "Aceleração"]
-        ]
-    },
-
-    {
-        title: "🎯 Finalização",
-        attributes: [
-            ["shooting", "Finalização"],
-            ["finishing", "Precisão"],
-            ["shotPower", "Força do chute"],
-            ["longShots", "Chutes de longe"],
-            ["volleys", "Voleios"],
-            ["penalties", "Pênaltis"]
-        ]
-    },
-
-    {
-        title: "🎯 Passe",
-        attributes: [
-            ["passing", "Passe"],
-            ["vision", "Visão"],
-            ["crossing", "Cruzamento"],
-            ["freeKick", "Falta"],
-            ["shortPassing", "Passe curto"],
-            ["longPassing", "Passe longo"],
-            ["curve", "Curva"]
-        ]
-    },
-
-    {
-        title: "🪄 Drible",
-        attributes: [
-            ["dribbling", "Drible"],
-            ["agility", "Agilidade"],
-            ["balance", "Equilíbrio"],
-            ["reactions", "Reações"],
-            ["ballControl", "Controle de bola"],
-            ["composure", "Compostura"]
-        ]
-    },
-
-    {
-        title: "🛡️ Defesa",
-        attributes: [
-            ["defending", "Defesa"],
-            ["interceptions", "Interceptações"],
-            ["heading", "Cabeceio"],
-            ["marking", "Marcação"],
-            ["standingTackle", "Desarme em pé"],
-            ["slidingTackle", "Carrinho"]
-        ]
-    },
-
-    {
-        title: "💪 Físico",
-        attributes: [
-            ["physical", "Físico"],
-            ["stamina", "Fôlego"],
-            ["strength", "Força"],
-            ["aggression", "Agressividade"],
-            ["jumping", "Impulsão"]
-        ]
-    }
+    { title: "⚽ Ataque", attributes: [
+        ["crossing", "Cruzamento"], ["finishing", "Finalização"],
+        ["heading", "Precisão no Cabeceio"], ["shortPassing", "Passe Curto"],
+        ["volleys", "Voleio"], ["weakFoot", "Perna Ruim"]
+    ]},
+    { title: "🛡️ Defesa", attributes: [
+        ["standingTackle", "Dividida em pé"], ["slidingTackle", "Carrinho"]
+    ]},
+    { title: "🎮 Habilidade", attributes: [
+        ["dribbling", "Condução de bola"], ["curve", "Curva"],
+        ["freeKick", "Precisão nas Faltas"], ["longPassing", "Lançamento"],
+        ["ballControl", "Controle de bola"]
+    ]},
+    { title: "💪 Força", attributes: [
+        ["shotPower", "Força do Chute"], ["jumping", "Impulsão"],
+        ["stamina", "Fôlego"], ["strength", "Força"], ["longShots", "Chute de longe"]
+    ]},
+    { title: "🏃 Movimentação", attributes: [
+        ["acceleration", "Aceleração"], ["sprintSpeed", "Pique"],
+        ["agility", "Agilidade"], ["reactions", "Reação"], ["balance", "Equilíbrio"]
+    ]},
+    { title: "🧠 Mentalidade", attributes: [
+        ["aggression", "Agressividade"], ["interceptions", "Interceptação"],
+        ["positioning", "Posicionamento"], ["vision", "Visão de jogo"],
+        ["penalties", "Pênaltis"]
+    ]}
 ];
 
 
@@ -5408,6 +5334,12 @@ function renderAttributes(career) {
     $("#cardOverall").textContent =
         calculateOverall(career) || "0";
 
+    const overallEdit = $("#overallEditValue");
+    const heightEdit = $("#overallEditHeight");
+    const weightEdit = $("#overallEditWeight");
+    if (overallEdit) overallEdit.value = career.overall ?? "";
+    if (heightEdit) heightEdit.value = career.height ?? "";
+    if (weightEdit) weightEdit.value = career.weight ?? "";
 
     groups.innerHTML = "";
 
@@ -5417,9 +5349,7 @@ function renderAttributes(career) {
     }
 
 
-    const attrs =
-        career.attributes ||
-        defaultAttributes();
+    const attrs = { ...defaultAttributes(), ...(career.attributes || {}) };
 
 
     ATTRIBUTE_GROUPS.forEach(
@@ -5453,7 +5383,8 @@ function renderAttributes(career) {
                                     <input
                                         type="number"
                                         min="0"
-                                        max="99"
+                                        max="${key === "weakFoot" ? 5 : 99}"
+                                        min="${key === "weakFoot" ? 1 : 0}"
                                         data-attribute="${key}"
                                         value="${number(attrs[key])}"
                                     >
@@ -5521,14 +5452,9 @@ function saveAttributes() {
                 number(input.value);
 
 
-            value =
-                Math.max(
-                    0,
-                    Math.min(
-                        99,
-                        value
-                    )
-                );
+            value = key === "weakFoot"
+                ? Math.max(1, Math.min(5, value || 1))
+                : Math.max(0, Math.min(99, value));
 
 
             career.attributes[key] =
@@ -5537,6 +5463,13 @@ function saveAttributes() {
         }
     );
 
+
+    const overallEdit = $("#overallEditValue");
+    const heightEdit = $("#overallEditHeight");
+    const weightEdit = $("#overallEditWeight");
+    if (overallEdit && overallEdit.value.trim() !== "") career.overall = Math.max(0, Math.min(99, number(overallEdit.value)));
+    if (heightEdit && heightEdit.value.trim() !== "") career.height = Math.max(1, number(heightEdit.value));
+    if (weightEdit && weightEdit.value.trim() !== "") career.weight = Math.max(1, number(weightEdit.value));
 
     career.updatedAt = today();
 
