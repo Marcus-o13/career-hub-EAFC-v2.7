@@ -1492,6 +1492,58 @@ td strong {
     font-weight: 800;
 }
 
+.big-overall-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.card-overall-edit-label {
+    color: var(--muted);
+    font-size: 0.65rem;
+    font-weight: 700;
+}
+
+.card-overall-edit {
+    width: 62px;
+    max-width: 100%;
+    padding: 4px 3px;
+    text-align: center;
+    color: var(--green);
+    background: rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(0, 255, 120, 0.28);
+    border-radius: 7px;
+    font-weight: 800;
+}
+
+.card-physical-editors {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+}
+
+.card-physical-editors label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.68rem;
+    color: var(--muted);
+}
+
+.card-physical-editors input {
+    width: 100%;
+    min-width: 0;
+    padding: 7px 6px;
+    color: var(--text);
+    background: rgba(255,255,255,0.07);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+}
+
+.card-physical-summary { display: none !important; }
+
 .big-overall {
     font-size: 3rem;
 

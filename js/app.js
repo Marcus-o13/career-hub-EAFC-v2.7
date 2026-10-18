@@ -1376,11 +1376,8 @@ function renderCareerHistory(career) {
     const container = $("#careerHistoryList");
     if (!container) return;
     const items = Array.isArray(career.history) ? career.history : [];
-    if (!items.length) {
-        container.innerHTML = emptyRecord("📖", "Nenhuma história", "Adicione fotos e conte a trajetória desta carreira.");
-        return;
-    }
-    container.innerHTML = items.map(item => `
+    const competitions = getCompetitionHistoryTotals(career);
+    const historyHtml = items.map(item => `
         <article class="career-history-card">
             <div class="career-history-photo">${item.photo ? `<img src="${item.photo}" alt="${escapeHTML(item.title)}">` : "📖"}</div>
             <div>
@@ -1392,8 +1389,14 @@ function renderCareerHistory(career) {
                     <button type="button" class="delete-btn" data-career-history-delete="${item.id}">🗑️ Excluir</button>
                 </div>
             </div>
-        </article>
-    `).join("");
+        </article>`).join("");
+    const statsHtml = `
+        <section class="card compact competition-history-summary" style="margin-bottom:18px">
+            <h3>📊 Desempenho histórico por competição</h3>
+            <p>Totais calculados automaticamente a partir das competições cadastradas nas temporadas.</p>
+            ${competitions.length ? `<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:8px">Competição</th><th style="text-align:left;padding:8px">Vínculo</th><th style="text-align:left;padding:8px">Time/Seleção</th><th style="padding:8px">Jogos</th><th style="padding:8px">Gols</th><th style="padding:8px">Assist.</th></tr></thead><tbody>${competitions.map(c => `<tr><td style="padding:8px">${escapeHTML(c.name)}</td><td style="padding:8px">${c.scope === "selection" ? "Seleção" : "Clube"}</td><td style="padding:8px">${escapeHTML(c.entity)}</td><td style="text-align:center;padding:8px">${formatNumber(c.games)}</td><td style="text-align:center;padding:8px">${formatNumber(c.goals)}</td><td style="text-align:center;padding:8px">${formatNumber(c.assists)}</td></tr>`).join("")}</tbody></table></div>` : `<p>Nenhuma competição cadastrada nas temporadas ainda.</p>`}
+        </section>`;
+    container.innerHTML = statsHtml + (historyHtml || emptyRecord("📖", "Nenhuma história", "Adicione fotos e conte a trajetória desta carreira."));
 }
 
 function handleCareerHistoryDelegation(event) {
@@ -2047,6 +2050,8 @@ function resetSeasonForm() {
     if (clubPhotoInput) clubPhotoInput.value = "";
 
     $("#seasonTrophyEditor").innerHTML = "";
+    const competitionEditor = $("#seasonCompetitionEditor");
+    if (competitionEditor) competitionEditor.innerHTML = "";
 }
 
 
@@ -2156,11 +2161,63 @@ function openEditSeasonModal(id) {
         season.trophies || []
     );
 
+    renderSeasonCompetitionsEditor(season.competitions || []);
+
     updateSeasonCoachFields();
 
     openDialog("seasonDialog");
 }
 
+
+function addSeasonCompetitionRow(competition = {}) {
+    const editor = $("#seasonCompetitionEditor");
+    if (!editor) return;
+    const row = document.createElement("div");
+    row.className = "season-competition-row";
+    row.style.cssText = "display:grid;grid-template-columns: minmax(150px,2fr) minmax(110px,1fr) repeat(3,minmax(65px,.7fr)) auto;gap:8px;align-items:end;margin:10px 0;padding:10px;border:1px solid var(--border-color,#ddd);border-radius:10px";
+    row.innerHTML = `
+        <label>Competição<input type="text" data-comp-name placeholder="Ex.: Premier League" value="${escapeHTML(competition.name || "")}" required></label>
+        <label>Vínculo<select data-comp-scope><option value="club" ${competition.scope !== "selection" ? "selected" : ""}>Clube</option><option value="selection" ${competition.scope === "selection" ? "selected" : ""}>Seleção</option></select></label>
+        <label>Jogos<input type="number" min="0" step="1" data-comp-games value="${number(competition.games)}"></label>
+        <label>Gols<input type="number" min="0" step="1" data-comp-goals value="${number(competition.goals)}"></label>
+        <label>Assistências<input type="number" min="0" step="1" data-comp-assists value="${number(competition.assists)}"></label>
+        <button type="button" class="delete-btn" data-remove-comp aria-label="Excluir competição">✕</button>`;
+    row.querySelector("[data-remove-comp]").addEventListener("click", () => row.remove());
+    editor.appendChild(row);
+}
+
+function renderSeasonCompetitionsEditor(competitions = []) {
+    const editor = $("#seasonCompetitionEditor");
+    if (!editor) return;
+    editor.innerHTML = "";
+    (competitions || []).forEach(item => addSeasonCompetitionRow(item));
+}
+
+function getSeasonCompetitionsFromForm() {
+    return Array.from(document.querySelectorAll("#seasonCompetitionEditor .season-competition-row"))
+        .map(row => ({
+            id: row.dataset.competitionId || uid("competition"),
+            name: row.querySelector("[data-comp-name]").value.trim(),
+            scope: row.querySelector("[data-comp-scope]").value,
+            games: number(row.querySelector("[data-comp-games]").value),
+            goals: number(row.querySelector("[data-comp-goals]").value),
+            assists: number(row.querySelector("[data-comp-assists]").value)
+        }))
+        .filter(item => item.name);
+}
+
+function getCompetitionHistoryTotals(career) {
+    const totals = new Map();
+    (career.seasons || []).forEach(season => (season.competitions || []).forEach(comp => {
+        const scope = comp.scope === "selection" ? "selection" : "club";
+        const entity = scope === "selection" ? (season.selection || "Seleção não especificada") : (season.club || "Clube não especificado");
+        const key = `${scope}::${entity}::${comp.name.trim().toLocaleLowerCase("pt-BR")}`;
+        if (!totals.has(key)) totals.set(key, { scope, entity, name: comp.name.trim(), games: 0, goals: 0, assists: 0, seasons: 0 });
+        const item = totals.get(key);
+        item.games += number(comp.games); item.goals += number(comp.goals); item.assists += number(comp.assists); item.seasons += 1;
+    }));
+    return Array.from(totals.values()).sort((a,b) => a.scope.localeCompare(b.scope) || a.entity.localeCompare(b.entity) || a.name.localeCompare(b.name));
+}
 
 function renderSeasonTrophiesEditor(
     trophies = []
@@ -2419,7 +2476,8 @@ async function handleSeasonSubmit(event) {
         notes:
             $("#seasonNotes").value.trim(),
 
-        trophies
+        trophies,
+        competitions: getSeasonCompetitionsFromForm()
 
     };
 
@@ -6742,6 +6800,8 @@ function setupEvents() {
             "click",
             () => addSeasonTrophyRow()
         );
+
+    $("#addSeasonCompetitionBtn")?.addEventListener("click", () => addSeasonCompetitionRow());
 
 
     /* TRANSFERÊNCIA */
